@@ -1,0 +1,53 @@
+import com.mashape.unirest.http.Unirest
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.impl.client.HttpClients
+
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'com.mashape.unirest:unirest-java:1.4.9'
+		classpath 'org.apache.httpcomponents:httpclient:4.5.3'
+
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+task ork {
+	doLast {
+		Unirest.httpClient = HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier()).build()
+
+		println Unirest.get("https://www.google.com").asString().getBody()
+
+		Unirest.shutdown()
+		println 'finished'
+	}
+}
+
+dependencies {
+	compile ('org.springframework.boot:spring-boot-starter')
+	compile ('org.springframework.boot:spring-boot-starter-jdbc')
+	compile 'org.springframework.boot:spring-boot-autoconfigure:+'
+	compile 'org.slf4j:slf4j-api:+'
+	compile 'org.codehaus.groovy:groovy-all:2.4.7'
+	compile('com.h2database:h2:1.4.187')
+	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
+	testCompile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4'
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
+}

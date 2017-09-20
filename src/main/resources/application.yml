@@ -1,0 +1,20 @@
+spring:
+  output:
+    ansi:
+      enabled: detect
+  datasource:
+    initialize: false
+
+datasources:
+  annie:
+    url: jdbc:h2:tcp://localhost/~/penguindb
+    driverClassName: org.h2.Driver
+    username: annie
+    password: annie
+  phil:
+    url: jdbc:h2:tcp://localhost/~/penguindb
+    driverClassName: org.h2.Driver
+    username: phil
+    password: phillie
+
+
